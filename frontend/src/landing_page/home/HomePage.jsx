@@ -1,20 +1,20 @@
 import Hero from  "./Hero.jsx"
 import Awards from  "./Awards.jsx"
-import Stats from  "./Stats.js"
+import Stats from  "./Stats.jsx"
 import Pricing from  "./Pricing.jsx"
-import Openaccount from  "../Openaccount.jsx"
-import Navbar from "../Navbar.jsx"
-import Footer from "../Footer.jsx"
+import Openaccount from "../../Openaccount"
+import Navbar from "../../Navbar"
+import Footer from "../../Footer"
 
 export default function HomePage(){
     return(
     <>
+     <Navbar />
     <Hero />
     <Awards />
      <Stats />
      <Pricing />
      <Openaccount />
-     <Navbar />
     <Footer />
     </>
     );
