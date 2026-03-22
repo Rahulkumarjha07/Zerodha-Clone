@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 
 export default function Hero(){
     return(
-        <div className='container p-5'>
+        <div className='container p-5 mb-5'>
             <div className="row text-center">
                 <img src='media/homeHero.png' alt='trading dashboard' className='mb-5' />
 
