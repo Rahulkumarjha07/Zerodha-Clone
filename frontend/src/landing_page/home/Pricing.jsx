@@ -17,7 +17,7 @@ export default function Pricing(){
 
                 </div>
                 <div className="col-1"></div>
-                <div className="col-6 ">
+                <div className="col-6">
                     <div 
                         className="d-flex text-center"
                         style={{
@@ -27,7 +27,7 @@ export default function Pricing(){
                         }}
                     >
                         {/* LEFT */}
-                        <div className="w-50 p-4">
+                        <div className="w-50 p-4 ">
                             <h1 className="mb-2">&#8377;0</h1>
                             <p>Free equity delivery and direct mutual funds</p>
                         </div>
