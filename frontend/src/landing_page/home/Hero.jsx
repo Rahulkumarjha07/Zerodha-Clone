@@ -12,7 +12,7 @@ export default function Hero(){
 
                <div className="d-flex justify-content-center">
                   <Button variant="contained" size="medium">
-                      Sign Up
+                      Sign Up for free
                     </Button>
                 </div>
             </div>
