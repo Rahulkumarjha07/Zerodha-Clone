@@ -1,5 +1,8 @@
+import Hero from "./Hero"
 export default function PricingPage(){
     return(
-        <h1>Pricing Page</h1>
+        <>
+        <Hero />
+        </>
     );
 }

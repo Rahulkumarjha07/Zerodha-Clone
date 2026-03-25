@@ -18,7 +18,6 @@ root.render(
    <Navbar />
     <Routes>
       <Route path="/" element={<HomePage />} />
-      <Route path="/signup" element={<Signup />} /> {/* ✅ Added route */}
        <Route path="/about" element={<AboutPage />} />
        <Route path="/product" element={<ProductPage />} />
         <Route path="/pricing" element={<PricingPage />} />
