@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 export default function Navbar() {
   return (
     <nav
@@ -7,13 +8,13 @@ export default function Navbar() {
       <div className="container p-1">
 
         {/* Logo */}
-        <a className="navbar-brand" href="#">
+        <Link className="navbar-brand" to="/">
           <img
             src="/media/logo.svg"
             alt="logo"
             style={{ width: "120px" }}
           />
-        </a>
+        </Link>
 
         {/* Toggle Button */}
         <button
@@ -33,23 +34,23 @@ export default function Navbar() {
           <ul className="navbar-nav">
 
             <li className="nav-item">
-              <a className="nav-link active" href="#">Signup</a>
+              <Link className="nav-link active" to="/signup">Signup</Link>
             </li>
 
             <li className="nav-item ">
-              <a className="nav-link active" href="#">About</a>
+              <Link className="nav-link active" to="/about">About</Link>
             </li>
 
             <li className="nav-item ">
-              <a className="nav-link active" href="#">Products</a>
+              <Link className="nav-link active" to="/product">Products</Link>
             </li>
 
             <li className="nav-item ">
-              <a className="nav-link active" href="#">Pricing</a>
+              <Link className="nav-link active" to="/pricing">Pricing</Link>
             </li>
 
             <li className="nav-item active">
-              <a className="nav-link active" href="#">Support</a>
+              <Link className="nav-link active" to="/support">Support</Link>
             </li>
 
           </ul>
