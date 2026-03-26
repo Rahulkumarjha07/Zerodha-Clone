@@ -6,6 +6,7 @@ import Education from "./Education.jsx"
 import Openaccount from "../../Openaccount"
 
 
+
 export default function HomePage(){
     return(
     <>

@@ -15,3 +15,92 @@ code {
   margin-left:20px;
   font-weight: 500;
 }
+
+.support-hero {
+  background-color: #387ed1;
+  padding: 50px 0;   /* 🔥 reduced */
+  color: white;
+}
+
+/* Top bar */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  font-size: 16px;
+}
+
+.top-bar a {
+  color: white;
+  text-decoration: underline;
+  font-size: 14px;
+   text-decoration: none;
+
+}
+
+/* Heading */
+.hero-text {
+  font-size: 30px;   /* 🔥 corrected size */
+  font-weight: 400;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+/* Search */
+.search-input {
+  width: 75%;             /* 🔥 not too wide */
+  padding: 14px 16px;     /* 🔥 less height */
+  border-radius: 6px;     /* 🔥 less rounded */
+  border: none;
+  margin-bottom: 15px;
+  font-size: 15px;
+}
+
+/* Links */
+.links a {
+  color: white;
+  text-decoration: underline;
+  margin-right: 18px;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+/* Featured */
+.featured {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.feature-list {
+  padding-left: 18px;
+}
+
+.feature-list li {
+  margin-bottom: 10px;
+}
+
+.feature-list a {
+  color: white;
+  text-decoration: underline;
+  font-size: 14px;
+  text-decoration: none;
+}
+.support-list li {
+  margin-bottom: 12px;
+}
+
+.support-list a {
+  text-decoration: none;
+  color: #387ed1;
+}
+
+.support-list a:hover {
+  text-decoration: none;
+  color: #1a5bb8;
+}
+
+h5 i {
+  color: #6c757d;
+}
+
