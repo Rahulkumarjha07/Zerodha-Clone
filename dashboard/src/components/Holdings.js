@@ -1,9 +1,20 @@
-import React from "react";
-import { holdings } from "../data/data.js";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { VerticalGraph } from "./VerticalGraph";
 
 const Holdings = () => {
-  
+  const [holdings, setholdings] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/holdings")
+      .then((res) => {
+        setholdings(res.data); 
+      })
+      .catch((err) => {       
+        console.error(err);
+      });
+  }, []);
 
   return (
     <>
@@ -48,26 +59,6 @@ const Holdings = () => {
           </tbody>
         </table>
       </div>
-
-      {/* Static Summary */}
-      <div className="row">
-        <div className="col">
-          <h5>5000.00</h5>
-          <p>Total Investment</p>
-        </div>
-
-        <div className="col">
-          <h5>6000.00</h5>
-          <p>Current Value</p>
-        </div>
-
-        <div className="col">
-          <h5 className="profit">1000.00 (20.00%)</h5>
-          <p>P&amp;L</p>
-        </div>
-      </div>
-
-      
     </>
   );
 };
