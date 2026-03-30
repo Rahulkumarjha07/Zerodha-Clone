@@ -1,29 +1,55 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
-
 import axios from "axios";
 
 import GeneralContext from "./GeneralContext";
-
 import "./BuyActionWindow.css";
 
 const BuyActionWindow = ({ uid }) => {
   const [stockQuantity, setStockQuantity] = useState(1);
   const [stockPrice, setStockPrice] = useState(0.0);
 
-  const handleBuyClick = () => {
-    axios.post("http://localhost:3002/newOrder", {
-      name: uid,
-      qty: stockQuantity,
-      price: stockPrice,
-      mode: "BUY",
-    });
+  // ✅ FIX: useContext properly
+  const generalContext = useContext(GeneralContext);
 
-    GeneralContext.closeBuyWindow();
+  // 🔥 BUY FUNCTION (FIXED)
+  const handleBuyClick = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        alert("Please login first");
+        return;
+      }
+
+      const res = await axios.post(
+        "http://localhost:8080/order",
+        {
+          name: uid,
+          qty: Number(stockQuantity),
+          price: Number(stockPrice),
+          mode: "BUY",
+        },
+        {
+          headers: {
+           Authorization: `Bearer ${localStorage.getItem("token")}`
+          },
+        }
+      );
+
+      console.log("✅ Order placed:", res.data);
+
+      // 🔥 close window
+      generalContext.closeBuyWindow();
+
+    } catch (err) {
+      console.error("❌ BUY ERROR:", err.response?.data || err.message);
+      alert("Order failed");
+    }
   };
 
   const handleCancelClick = () => {
-    GeneralContext.closeBuyWindow();
+    generalContext.closeBuyWindow();
   };
 
   return (
@@ -35,20 +61,20 @@ const BuyActionWindow = ({ uid }) => {
             <input
               type="number"
               name="qty"
-              id="qty"
-              onChange={(e) => setStockQuantity(e.target.value)}
+              min="1"
               value={stockQuantity}
+              onChange={(e) => setStockQuantity(e.target.value)}
             />
           </fieldset>
+
           <fieldset>
             <legend>Price</legend>
             <input
               type="number"
               name="price"
-              id="price"
               step="0.05"
-              onChange={(e) => setStockPrice(e.target.value)}
               value={stockPrice}
+              onChange={(e) => setStockPrice(e.target.value)}
             />
           </fieldset>
         </div>
@@ -56,11 +82,13 @@ const BuyActionWindow = ({ uid }) => {
 
       <div className="buttons">
         <span>Margin required ₹140.65</span>
+
         <div>
           <Link className="btn btn-blue" onClick={handleBuyClick}>
             Buy
           </Link>
-          <Link to="" className="btn btn-grey" onClick={handleCancelClick}>
+
+          <Link className="btn btn-grey" onClick={handleCancelClick}>
             Cancel
           </Link>
         </div>

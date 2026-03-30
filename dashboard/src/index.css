@@ -841,3 +841,10 @@ hr {
 .action:hover {
   background-color: rgb(212, 212, 212);
 }
+
+.Find{
+  color: black;              /* ✅ text color */
+  background-color: white;   /* optional but recommended */
+  border: 1px solid #ccc;
+  padding: 8px;
+}

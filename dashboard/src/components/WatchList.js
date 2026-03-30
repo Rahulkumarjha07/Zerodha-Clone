@@ -1,11 +1,9 @@
-import React, { useState, useContext } from "react";
-
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 
 import GeneralContext from "./GeneralContext";
 
 import { Tooltip, Grow } from "@mui/material";
-
 import {
   BarChartOutlined,
   KeyboardArrowDown,
@@ -13,165 +11,181 @@ import {
   MoreHoriz,
 } from "@mui/icons-material";
 
-import { watchlist } from "../data/data";
 import { DoughnutChart } from "./DoughnoutChart";
 
-const labels = watchlist.map((subArray) => subArray["name"]);
-
 const WatchList = () => {
+  const [watchlist, setWatchlist] = useState([]);
+  const [search, setSearch] = useState("");
+
+  // ✅ MARKET STATUS
+  const isMarketOpen = () => {
+    const now = new Date();
+    const day = now.getDay();
+
+    const time = now.getHours() * 60 + now.getMinutes();
+    const start = 9 * 60 + 15;
+    const end = 15 * 60 + 30;
+
+    if (day === 0 || day === 6) return false;
+    if (time < start || time > end) return false;
+
+    return true;
+  };
+
+  // ✅ FETCH DATA
+  useEffect(() => {
+    const fetchData = () => {
+      axios
+        .get("http://localhost:8080/api/stocks")
+        .then((res) => {
+          let formatted = res.data.stocks.map((s) => ({
+            name: s.symbol.replace(".NS", ""),
+            price: s.regularMarketPrice,
+            percent: s.regularMarketChangePercent.toFixed(2) + "%",
+            isDown: s.regularMarketChangePercent < 0,
+          }));
+
+          // 🔥 Fake movement when market closed
+          if (!isMarketOpen()) {
+            formatted = formatted.map((stock) => ({
+              ...stock,
+              price: Number(
+                (stock.price + (Math.random() * 10 - 5)).toFixed(2)
+              ),
+            }));
+          }
+
+          setWatchlist(formatted);
+        })
+        .catch((err) => console.error(err));
+    };
+
+    fetchData();
+    const interval = setInterval(fetchData, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // ✅ SEARCH FILTER
+  const filteredStocks = watchlist.filter((stock) =>
+    stock.name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  // ✅ CHART DATA
   const data = {
-    labels,
+    labels: filteredStocks.map((s) => s.name),
     datasets: [
       {
         label: "Price",
-        data: watchlist.map((stock) => stock.price),
+        data: filteredStocks.map((s) => s.price),
         backgroundColor: [
           "rgba(255, 99, 132, 0.5)",
           "rgba(54, 162, 235, 0.5)",
           "rgba(255, 206, 86, 0.5)",
           "rgba(75, 192, 192, 0.5)",
-          "rgba(153, 102, 255, 0.5)",
-          "rgba(255, 159, 64, 0.5)",
         ],
-        borderColor: [
-          "rgba(255, 99, 132, 1)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-          "rgba(255, 159, 64, 1)",
-        ],
-        borderWidth: 1,
       },
     ],
   };
-
-  // export const data = {
-  //   labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-  // datasets: [
-  //   {
-  //     label: "# of Votes",
-  //     data: [12, 19, 3, 5, 2, 3],
-  //     backgroundColor: [
-  //       "rgba(255, 99, 132, 0.2)",
-  //       "rgba(54, 162, 235, 0.2)",
-  //       "rgba(255, 206, 86, 0.2)",
-  //       "rgba(75, 192, 192, 0.2)",
-  //       "rgba(153, 102, 255, 0.2)",
-  //       "rgba(255, 159, 64, 0.2)",
-  //     ],
-  //     borderColor: [
-  //       "rgba(255, 99, 132, 1)",
-  //       "rgba(54, 162, 235, 1)",
-  //       "rgba(255, 206, 86, 1)",
-  //       "rgba(75, 192, 192, 1)",
-  //       "rgba(153, 102, 255, 1)",
-  //       "rgba(255, 159, 64, 1)",
-  //     ],
-  //     borderWidth: 1,
-  //   },
-  // ],
-  // };
 
   return (
     <div className="watchlist-container">
       <div className="search-container">
         <input
           type="text"
-          name="search"
-          id="search"
-          placeholder="Search eg:infy, bse, nifty fut weekly, gold mcx"
-          className="search"
+          placeholder="Search eg: infy, tcs, reliance"
+          className="Find"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
-        <span className="counts"> {watchlist.length} / 50</span>
+
+        <span className="counts">
+          {filteredStocks.length} / {watchlist.length}
+        </span>
       </div>
 
+      {/* MARKET STATUS */}
+      <p className={isMarketOpen() ? "open" : "closed"}>
+        {isMarketOpen() ? "🟢 Market Open" : "🔴 Market Closed"}
+      </p>
+
       <ul className="list">
-        {watchlist.map((stock, index) => {
-          return <WatchListItem stock={stock} key={index} />;
-        })}
+        {filteredStocks.map((stock, index) => (
+          <WatchListItem stock={stock} key={index} />
+        ))}
       </ul>
 
-      <DoughnutChart data={data} />
+      {/* NO RESULT */}
+      {filteredStocks.length === 0 && (
+        <p style={{ textAlign: "center" }}>No stocks found</p>
+      )}
+
+      {filteredStocks.length > 0 && <DoughnutChart data={data} />}
     </div>
   );
 };
 
 export default WatchList;
 
+// ================= ITEM =================
+
 const WatchListItem = ({ stock }) => {
-  const [showWatchlistActions, setShowWatchlistActions] = useState(false);
-
-  const handleMouseEnter = (e) => {
-    setShowWatchlistActions(true);
-  };
-
-  const handleMouseLeave = (e) => {
-    setShowWatchlistActions(false);
-  };
+  const [show, setShow] = useState(false);
 
   return (
-    <li onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+    <li onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
       <div className="item">
         <p className={stock.isDown ? "down" : "up"}>{stock.name}</p>
+
         <div className="itemInfo">
-          <span className="percent">{stock.percent}</span>
+          <span>{stock.percent}</span>
+
           {stock.isDown ? (
             <KeyboardArrowDown className="down" />
           ) : (
-            <KeyboardArrowUp className="down" />
+            <KeyboardArrowUp className="up" />
           )}
-          <span className="price">{stock.price}</span>
+
+          <span>₹{stock.price}</span>
         </div>
       </div>
-      {showWatchlistActions && <WatchListActions uid={stock.name} />}
+
+      {show && <WatchListActions uid={stock.name} />}
     </li>
   );
 };
 
+// ================= ACTIONS =================
+
 const WatchListActions = ({ uid }) => {
   const generalContext = useContext(GeneralContext);
 
-  const handleBuyClick = () => {
-    generalContext.openBuyWindow(uid);
-  };
-
   return (
     <span className="actions">
-      <span>
-        <Tooltip
-          title="Buy (B)"
-          placement="top"
-          arrow
-          TransitionComponent={Grow}
-          onClick={handleBuyClick}
+      <Tooltip title="Buy" arrow TransitionComponent={Grow}>
+        <button
+          className="buy"
+          onClick={() => generalContext.openBuyWindow(uid)}
         >
-          <button className="buy">Buy</button>
-        </Tooltip>
-        <Tooltip
-          title="Sell (S)"
-          placement="top"
-          arrow
-          TransitionComponent={Grow}
-        >
-          <button className="sell">Sell</button>
-        </Tooltip>
-        <Tooltip
-          title="Analytics (A)"
-          placement="top"
-          arrow
-          TransitionComponent={Grow}
-        >
-          <button className="action">
-            <BarChartOutlined className="icon" />
-          </button>
-        </Tooltip>
-        <Tooltip title="More" placement="top" arrow TransitionComponent={Grow}>
-          <button className="action">
-            <MoreHoriz className="icon" />
-          </button>
-        </Tooltip>
-      </span>
+          Buy
+        </button>
+      </Tooltip>
+
+      <Tooltip title="Sell" arrow TransitionComponent={Grow}>
+        <button className="sell">Sell</button>
+      </Tooltip>
+
+      <Tooltip title="Analytics" arrow TransitionComponent={Grow}>
+        <button className="action">
+          <BarChartOutlined />
+        </button>
+      </Tooltip>
+
+      <Tooltip title="More" arrow TransitionComponent={Grow}>
+        <button className="action">
+          <MoreHoriz />
+        </button>
+      </Tooltip>
     </span>
   );
 };

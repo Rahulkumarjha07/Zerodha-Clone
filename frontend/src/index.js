@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './index.css';
 import HomePage from "./landing_page/home/HomePage";
-import Signup from "./landing_page/signup/Signup.jsx";
+import Signup from "./landing_page/signup/Signup";
+import Login from "./landing_page/signup/Login";
 import AboutPage from "./landing_page/about/Aboutpage.jsx";
 import  ProductPage from "./landing_page/products/ProductPage.jsx";
 import PricingPage from "./landing_page/pricing/Pricingpage.jsx";
@@ -11,6 +12,7 @@ import Navbar from "./Navbar.jsx";
 import Footer from "./Footer.js"
 import Notfound from "./landing_page/Notfound.jsx";
 import Supportpage from './landing_page/support/Supportpage.jsx';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -23,6 +25,8 @@ root.render(
        <Route path="/product" element={<ProductPage />} />
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/support" element={<Supportpage/ >} />
+        <Route path="/signup" element={<Signup/ >} />
+        <Route path="/login" element={<Login />} />
          <Route path="*" element={<Notfound />} />
     </Routes>
     <Footer />
