@@ -114,4 +114,109 @@ h5 i {
     transform: translateY(0) scale(1);
   }
 }
+.portfolio-summary {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  background: #f9fafc;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.profit {
+  color: #00b386;
+  font-weight: bold;
+}
+
+.loss {
+  color: #ff4d4f;
+  font-weight: bold;
+}
+
+.error {
+  color: red;
+  text-align: center;
+}
+.fund-card {
+  margin: 20px 0;
+  padding: 20px;
+  background: #f9fafc;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.balance {
+  color: #387ed1;
+  font-size: 28px;
+  margin-top: 10px;
+}
+
+.error {
+  color: red;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+
+
+/* 🔹 MAIN TOPBAR */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+  flex-wrap: wrap; /* important for responsiveness */
+}
+
+/* 🔹 LEFT SIDE */
+.topbar-left {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Smooth mobile dropdown */
+.navbar-collapse {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Better mobile spacing */
+@media (max-width: 991px) {
+  .navbar-nav {
+    padding-top: 10px;
+  }
+
+  .nav-link {
+    padding: 10px 0;
+    font-size: 15px;
+  }
+
+  .btn {
+    padding: 10px;
+    font-size: 15px;
+  }
+}
+
+/* Desktop spacing */
+@media (min-width: 992px) {
+  .nav-link {
+    font-size: 14px;
+  }
+}
+
+/* Hover effect */
+.nav-link:hover {
+  color: #387ed1 !important;
+}
+
+/* Sticky navbar */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+
 

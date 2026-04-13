@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 
-import GeneralContext from "./GeneralContext";
+import { GeneralContext } from "./GeneralContext";
 
 import { Tooltip, Grow } from "@mui/material";
 import {
@@ -90,6 +90,7 @@ const WatchList = () => {
 
   return (
     <div className="watchlist-container">
+      {/* 🔍 SEARCH */}
       <div className="search-container">
         <input
           type="text"
@@ -104,23 +105,30 @@ const WatchList = () => {
         </span>
       </div>
 
-      {/* MARKET STATUS */}
+      {/* 📊 MARKET STATUS */}
       <p className={isMarketOpen() ? "open" : "closed"}>
         {isMarketOpen() ? "🟢 Market Open" : "🔴 Market Closed"}
       </p>
 
+      {/* 📋 STOCK LIST */}
       <ul className="list">
         {filteredStocks.map((stock, index) => (
           <WatchListItem stock={stock} key={index} />
         ))}
       </ul>
 
-      {/* NO RESULT */}
+      {/* ❌ NO RESULTS */}
       {filteredStocks.length === 0 && (
         <p style={{ textAlign: "center" }}>No stocks found</p>
       )}
 
-      {filteredStocks.length > 0 && <DoughnutChart data={data} />}
+      {/* 📊 CHART (WRAPPED FOR MOBILE HIDE) */}
+     {/* 📊 CHART (FIXED POSITION) */}
+{filteredStocks.length > 0 && (
+  <div className="chart-section">
+    <DoughnutChart data={data} />
+  </div>
+)}
     </div>
   );
 };
@@ -150,37 +158,51 @@ const WatchListItem = ({ stock }) => {
         </div>
       </div>
 
-      {show && <WatchListActions uid={stock.name} />}
+      {/* 🔥 ACTIONS */}
+      {show && <WatchListActions stock={stock} />}
     </li>
   );
 };
 
 // ================= ACTIONS =================
 
-const WatchListActions = ({ uid }) => {
+const WatchListActions = ({ stock }) => {
   const generalContext = useContext(GeneralContext);
 
   return (
     <span className="actions">
+      {/* 🟢 BUY */}
       <Tooltip title="Buy" arrow TransitionComponent={Grow}>
         <button
           className="buy"
-          onClick={() => generalContext.openBuyWindow(uid)}
+          onClick={() =>
+            generalContext.openBuyWindow(stock.name, stock.price)
+          }
         >
           Buy
         </button>
       </Tooltip>
 
+      {/* 🔴 SELL */}
       <Tooltip title="Sell" arrow TransitionComponent={Grow}>
-        <button className="sell">Sell</button>
+        <button
+          className="sell"
+          onClick={() =>
+            generalContext.openSellWindow(stock.name, stock.price)
+          }
+        >
+          Sell
+        </button>
       </Tooltip>
 
+      {/* 📊 ANALYTICS */}
       <Tooltip title="Analytics" arrow TransitionComponent={Grow}>
         <button className="action">
           <BarChartOutlined />
         </button>
       </Tooltip>
 
+      {/* ⋯ MORE */}
       <Tooltip title="More" arrow TransitionComponent={Grow}>
         <button className="action">
           <MoreHoriz />

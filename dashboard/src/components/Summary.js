@@ -4,35 +4,38 @@ import axios from "axios";
 const Summary = () => {
   const [holdings, setHoldings] = useState([]);
 
+  // ✅ USER INFO
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+
   useEffect(() => {
-  const fetchHoldings = async () => {
-    try {
-      const token = localStorage.getItem("token");
+    // 🔥 GET USER FROM LOCAL STORAGE
+    setUsername(localStorage.getItem("username") || "User");
+    setEmail(localStorage.getItem("email") || "");
 
-      console.log("TOKEN:", token); // 🔍 debug
+    const fetchHoldings = async () => {
+      try {
+        const token = localStorage.getItem("token");
 
-      if (!token) {
-        console.log("❌ No token found");
-        return;
+        if (!token) {
+          console.log("❌ No token found");
+          return;
+        }
+
+        const res = await axios.get("http://localhost:8080/holdings", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setHoldings(res.data);
+      } catch (err) {
+        console.error("❌ Error fetching summary:", err);
       }
+    };
 
-      const res = await axios.get("http://localhost:8080/holdings", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      console.log("✅ Summary Data:", res.data); // 🔍 debug
-
-      setHoldings(res.data);
-
-    } catch (err) {
-      console.error("❌ Error fetching summary:", err);
-    }
-  };
-
-  fetchHoldings();
-}, []);
+    fetchHoldings();
+  }, []);
 
   // ✅ CALCULATIONS
   let totalInvestment = 0;
@@ -55,8 +58,12 @@ const Summary = () => {
 
   return (
     <>
-      <div className="username">
-        <h6>Hi, User!</h6>
+      {/* 🔥 USER INFO */}
+      <div className="user-header">
+        <div>
+          <h5>Hi, {username} 👋</h5>
+          {email && <p className="user-email">{email}</p>}
+        </div>
         <hr className="divider" />
       </div>
 

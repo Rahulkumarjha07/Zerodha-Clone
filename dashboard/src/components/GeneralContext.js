@@ -1,37 +1,50 @@
 import React, { useState } from "react";
-
 import BuyActionWindow from "./BuyActionWindow";
 
-const GeneralContext = React.createContext({
-  openBuyWindow: (uid) => {},
-  closeBuyWindow: () => {},
-});
+export const GeneralContext = React.createContext();
 
-export const GeneralContextProvider = (props) => {
-  const [isBuyWindowOpen, setIsBuyWindowOpen] = useState(false);
+export const GeneralContextProvider = ({ children }) => {
+  const [isOrderOpen, setIsOrderOpen] = useState(false);
   const [selectedStockUID, setSelectedStockUID] = useState("");
+  const [orderType, setOrderType] = useState(null);
+  const [selectedPrice, setSelectedPrice] = useState(0); // ✅ NEW
 
-  const handleOpenBuyWindow = (uid) => {
-    setIsBuyWindowOpen(true);
+  // 🔥 OPEN ORDER WINDOW (NOW WITH PRICE)
+  const openOrderWindow = (uid, type, price = 0) => {
     setSelectedStockUID(uid);
+    setOrderType(type);
+    setSelectedPrice(price); // ✅ store price
+    setIsOrderOpen(true);
   };
 
-  const handleCloseBuyWindow = () => {
-    setIsBuyWindowOpen(false);
+  // 🔥 CLOSE WINDOW
+  const closeOrderWindow = () => {
+    setIsOrderOpen(false);
     setSelectedStockUID("");
+    setOrderType(null);
+    setSelectedPrice(0); // ✅ reset price
   };
 
   return (
     <GeneralContext.Provider
       value={{
-        openBuyWindow: handleOpenBuyWindow,
-        closeBuyWindow: handleCloseBuyWindow,
+        openBuyWindow: (uid, price) =>
+          openOrderWindow(uid, "BUY", price), // ✅ pass price
+        openSellWindow: (uid, price) =>
+          openOrderWindow(uid, "SELL", price), // ✅ pass price
+        closeOrderWindow,
       }}
     >
-      {props.children}
-      {isBuyWindowOpen && <BuyActionWindow uid={selectedStockUID} />}
+      {children}
+
+      {/* 🔥 PASS PRICE TO MODAL */}
+      {isOrderOpen && (
+        <BuyActionWindow
+          uid={selectedStockUID}
+          type={orderType}
+          price={selectedPrice} // ✅ NEW
+        />
+      )}
     </GeneralContext.Provider>
   );
 };
-
-export default GeneralContext;
