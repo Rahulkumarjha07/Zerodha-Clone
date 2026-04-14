@@ -24,7 +24,7 @@ export default function Signup() {
     }
 
     try {
-      await axios.post("http://localhost:8080/signup", {
+      await axios.post("https://zerodha-clone-93hl.onrender.com/signup", {
         email,
         password,
       });

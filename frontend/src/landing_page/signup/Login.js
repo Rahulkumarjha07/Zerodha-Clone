@@ -18,7 +18,7 @@ export default function Login() {
         return;
       }
 
-      const res = await axios.post("http://localhost:8080/login", {
+      const res = await axios.post("https://zerodha-clone-93hl.onrender.com/login", {
         email,
         password,
       });
@@ -31,7 +31,7 @@ export default function Login() {
 
       // ✅ FIX: Pass token in URL so port 3001 can pick it up
       setTimeout(() => {
-        window.location.href = `http://localhost:3001?token=${res.data.token}`;
+        window.location.href = `https://zerodha-clone-pi-lovat.vercel.app?token=${res.data.token}`;
       }, 1000);
 
     } catch (err) {
