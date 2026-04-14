@@ -16,7 +16,7 @@ const yahooFinance = new YahooFinance();
 // ================= MIDDLEWARE =================
 
 app.use(cors({
-  origin: ["http://localhost:3000", "http://localhost:3001", "https://zerodha-clone-pi-lovat.vercel.app"],
+  origin: ["http://localhost:3000", "http://localhost:3001", "https://zerodha-clone-pi-lovat.vercel.app","https://zerodha-clone-txsu.vercel.app"],
   allowedHeaders: ["Content-Type", "Authorization"],
 }));
 
