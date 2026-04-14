@@ -15,10 +15,22 @@ const yahooFinance = new YahooFinance();
 
 // ================= MIDDLEWARE =================
 
-app.use(cors({
-  origin: ["http://localhost:3000", "http://localhost:3001", "https://zerodha-clone-pi-lovat.vercel.app","https://zerodha-clone-txsu.vercel.app"],
+const corsOptions = {
+  origin: [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "https://zerodha-clone-pi-lovat.vercel.app",
+    "https://zerodha-clone-txsu.vercel.app"
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
-}));
+  credentials: true
+};
+
+app.use(cors(corsOptions));
+
+// 🔥 HANDLE PREFLIGHT (VERY IMPORTANT)
+app.options("*", cors(corsOptions));
 
 app.use(bodyparser.json());
 

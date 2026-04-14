@@ -24,7 +24,7 @@ const isAuthenticated = () => {
 const ProtectedRoute = ({ children }) => {
   if (!isAuthenticated()) {
     // 🔥 Redirect to frontend login
-    window.location.href = "http://localhost:3000/login";
+   window.location.href = "https://zerodha-clone-pi-lovat.vercel.app/login";
     return null;
   }
   return children;
