@@ -21,7 +21,7 @@ const Funds = () => {
         return;
       }
 
-      const res = await axios.get("http://localhost:8080/funds", {
+      const res = await axios.get("https://zerodha-clone-93hl.onrender.com/funds", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -63,7 +63,7 @@ const Funds = () => {
       const token = localStorage.getItem("token");
 
       await axios.post(
-        `http://localhost:8080/funds/${actionType}`,
+        `https://zerodha-clone-93hl.onrender.com/funds/${actionType}`,
         { amount: Number(amount) },
         {
           headers: { Authorization: `Bearer ${token}` },

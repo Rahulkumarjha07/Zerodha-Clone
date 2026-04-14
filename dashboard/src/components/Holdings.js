@@ -11,7 +11,7 @@ const Holdings = () => {
       const token = localStorage.getItem("token");
       if (!token) return;
 
-      const res = await axios.get("http://localhost:8080/holdings", {
+      const res = await axios.get("https://zerodha-clone-93hl.onrender.com/holdings", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

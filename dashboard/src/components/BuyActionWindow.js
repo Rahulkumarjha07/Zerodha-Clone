@@ -41,7 +41,7 @@ const BuyActionWindow = ({ uid, type = "BUY", price = 0 }) => {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await axios.get("http://localhost:8080/funds", {
+        const res = await axios.get("https://zerodha-clone-93hl.onrender.com/funds", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -88,7 +88,7 @@ const BuyActionWindow = ({ uid, type = "BUY", price = 0 }) => {
 
     try {
       const res = await axios.post(
-        "http://localhost:8080/order",
+        "https://zerodha-clone-93hl.onrender.com/order",
         {
           name: uid,
           qty: Number(stockQuantity),

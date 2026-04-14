@@ -17,7 +17,7 @@ const Orders = () => {
         return;
       }
 
-      const res = await axios.get("http://localhost:8080/orders", {
+      const res = await axios.get("https://zerodha-clone-93hl.onrender.com/orders", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

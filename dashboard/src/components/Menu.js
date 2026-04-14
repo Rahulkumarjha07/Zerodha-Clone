@@ -17,7 +17,7 @@ const Menu = () => {
 
         if (!token) return;
 
-        const res = await axios.get("http://localhost:8080/user", {
+        const res = await axios.get("https://zerodha-clone-93hl.onrender.com/user", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

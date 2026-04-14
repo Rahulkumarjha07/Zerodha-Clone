@@ -36,7 +36,7 @@ const WatchList = () => {
   useEffect(() => {
     const fetchData = () => {
       axios
-        .get("http://localhost:8080/api/stocks")
+        .get("https://zerodha-clone-93hl.onrender.com/api/stocks")
         .then((res) => {
           let formatted = res.data.stocks.map((s) => ({
             name: s.symbol.replace(".NS", ""),

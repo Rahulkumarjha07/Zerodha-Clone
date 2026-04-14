@@ -9,7 +9,7 @@ export default function Home() {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      window.location.href = "http://localhost:3000/login";
+     window.location.href = "https://zerodha-clone-pi-lovat.vercel.app/login";
     }
   }, []);
 
