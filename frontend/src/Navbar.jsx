@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function Navbar() {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+    <nav className="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm sticky-top">
       <div className="container">
 
         {/* Logo */}
@@ -20,42 +20,36 @@ export default function Navbar() {
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        {/* Menu */}
         <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav ms-auto align-items-lg-center">
 
+          {/* ✅ CENTER LINKS */}
+          <ul className="navbar-nav mx-auto gap-lg-4 text-center">
             <li className="nav-item">
-              <Link className="nav-link px-lg-3" to="/about">About</Link>
+              <Link className="nav-link" to="/about">About</Link>
             </li>
-
             <li className="nav-item">
-              <Link className="nav-link px-lg-3" to="/product">Products</Link>
+              <Link className="nav-link" to="/product">Products</Link>
             </li>
-
             <li className="nav-item">
-              <Link className="nav-link px-lg-3" to="/pricing">Pricing</Link>
+              <Link className="nav-link" to="/pricing">Pricing</Link>
             </li>
-
             <li className="nav-item">
-              <Link className="nav-link px-lg-3" to="/support">Support</Link>
+              <Link className="nav-link" to="/support">Support</Link>
             </li>
-
-            {/* Buttons */}
-            <li className="nav-item mt-3 mt-lg-0">
-              <Link className="btn btn-outline-primary w-100 w-lg-auto me-lg-2" to="/login">
-                Login
-              </Link>
-            </li>
-
-            <li className="nav-item mt-2 mt-lg-0">
-              <Link className="btn btn-primary w-100 w-lg-auto" to="/signup">
-                Signup
-              </Link>
-            </li>
-
           </ul>
-        </div>
 
+          {/* ✅ RIGHT BUTTONS */}
+          <div className="d-flex gap-2 mt-3 mt-lg-0">
+            <Link className="btn btn-outline-primary px-4" to="/login">
+              Login
+            </Link>
+
+            <Link className="btn btn-primary px-4" to="/signup">
+              Signup
+            </Link>
+          </div>
+
+        </div>
       </div>
     </nav>
   );

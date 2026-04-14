@@ -1,63 +1,51 @@
 export default function Team() {
   return (
-    <div className="container py-5">
+    <div className="container team-section">
 
       {/* Heading */}
-      <h1 className="text-center mb-5">People</h1>
+      <h1 className="text-center team-heading">People</h1>
 
-      <div className="row align-items-center">
+      <div className="row align-items-center justify-content-center">
 
-        {/* Left Side (Image + Name) */}
-        <div className="col-lg-5 text-center">
+        {/* 🔥 Left Side */}
+        <div className="col-lg-5 col-md-6 text-center team-left">
           <img
             src="media/nithinKamath.jpg"
             alt="Nithin Kamath"
-            style={{
-              borderRadius: "50%",
-              width: "250px",
-              height: "250px",
-              objectFit: "cover"
-            }}
+            className="team-img"
           />
 
           <h4 className="mt-4">Nithin Kamath</h4>
           <p className="text-muted">Founder, CEO</p>
         </div>
 
-        {/* Right Side (Content) */}
-        <div className="col-lg-7">
-          <p className="text-muted" style={{ lineHeight: "1.9" }}>
+        {/* 🔥 Right Side */}
+        <div className="col-lg-7 col-md-6 team-content">
+          <p>
             Nithin bootstrapped and founded Zerodha in 2010 to overcome the
             hurdles he faced during his decade long stint as a trader. Today,
             Zerodha has changed the landscape of the Indian broking industry.
           </p>
 
-          <p className="text-muted" style={{ lineHeight: "1.9" }}>
+          <p>
             He is a member of the SEBI Secondary Market Advisory Committee
             (SMAC) and the Market Data Advisory Committee (MDAC).
           </p>
 
-          <p className="text-muted" style={{ lineHeight: "1.9" }}>
+          <p>
             Playing basketball is his zen.
           </p>
 
-          <p className="text-muted">
+          <p>
             Connect on{" "}
-            <a href="#" className="text-primary text-decoration-none">
-              Homepage
-            </a>{" "}
-            /{" "}
-            <a href="#" className="text-primary text-decoration-none">
-              TradingQnA
-            </a>{" "}
-            /{" "}
-            <a href="#" className="text-primary text-decoration-none">
-              Twitter
-            </a>
+            <a href="#" className="link-primary">Homepage</a> /{" "}
+            <a href="#" className="link-primary">TradingQnA</a> /{" "}
+            <a href="#" className="link-primary">Twitter</a>
           </p>
         </div>
 
       </div>
+
     </div>
   );
 }

@@ -1,25 +1,26 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { FiLogOut } from "react-icons/fi";
+import "./modal.css";
 
 const Apps = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // 🔥 remove token
     localStorage.removeItem("token");
-
-    // 🔔 toast
     toast.success("Logged out successfully 👋");
-
-    // 🔁 redirect to frontend login
-    window.location.href = "http://localhost:3000/login";
+    navigate("/login");
   };
 
   return (
     <div className="modal-overlay">
       <div className="modal-box">
-        <h3>Logout 🚪</h3>
+        
+        <div className="icon">
+          <FiLogOut />
+        </div>
+
         <p>Are you sure you want to logout?</p>
 
         <div className="modal-buttons">
@@ -27,7 +28,8 @@ const Apps = () => {
             Logout
           </button>
 
-          <button className="cancel" onClick={() => navigate("/")}>
+          {/* 🔥 FIXED HERE */}
+          <button className="cancel" onClick={() => navigate(-1)}>
             Cancel
           </button>
         </div>

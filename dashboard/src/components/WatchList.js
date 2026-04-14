@@ -122,13 +122,6 @@ const WatchList = () => {
         <p style={{ textAlign: "center" }}>No stocks found</p>
       )}
 
-      {/* 📊 CHART (WRAPPED FOR MOBILE HIDE) */}
-     {/* 📊 CHART (FIXED POSITION) */}
-{filteredStocks.length > 0 && (
-  <div className="chart-section">
-    <DoughnutChart data={data} />
-  </div>
-)}
     </div>
   );
 };

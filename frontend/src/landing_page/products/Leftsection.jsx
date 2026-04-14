@@ -8,67 +8,62 @@ export default function Leftsection({
   appstore,
 }) {
   return (
-    <div className="container py-5">
+    <div className="container left-section">
+
       <div className="row align-items-center">
 
-        {/* LEFT IMAGE */}
-        <div className="col-lg-7 text-center">
-          <img
-            src={imageurl}
-            alt="product"
-            className="img-fluid"
-            style={{ maxWidth: "90%" }}
-          />
+        {/* 🔥 LEFT IMAGE */}
+        <div className="col-lg-7 col-md-6 text-center left-image">
+          <img src={imageurl} alt="product" />
         </div>
-        <div className="col-1"></div>
 
-        {/* RIGHT CONTENT */}
-        <div className="col-lg-4">
+        {/* 🔥 RIGHT CONTENT */}
+        <div className="col-lg-5 col-md-6 left-text">
 
-          <h2 className="mb-3">{productname}</h2>
+          <h2 className="product-title">
+            {productname}
+          </h2>
 
-          <p className="text-muted mb-4" style={{ lineHeight: "1.8" }}>
+          <p className="product-desc">
             {productdescription}
           </p>
 
-          {/* LINKS */}
-          <div className="mb-4">
-            <a
-              href={trydemo}
-              className="text-primary text-decoration-none me-4 fw-medium"
-            >
-              Try demo <i className="fa-solid fa-arrow-right ms-1"></i>
-            </a>
+          {/* 🔥 LINKS */}
+          <div className="product-links">
 
-            <a
-              href={learnmore}
-              className="text-primary text-decoration-none fw-medium"
-            >
-              Learn more <i className="fa-solid fa-arrow-right ms-1"></i>
-            </a>
+            {trydemo && (
+              <a href={trydemo}>
+                Try demo <i className="fa-solid fa-arrow-right ms-1"></i>
+              </a>
+            )}
+
+            {learnmore && (
+              <a href={learnmore}>
+                Learn more <i className="fa-solid fa-arrow-right ms-1"></i>
+              </a>
+            )}
+
           </div>
 
-          {/* STORE BUTTONS */}
-          <div className="d-flex gap-3">
-            <a href={googleplay}>
-              <img
-                src="media/googlePlayBadge.svg"
-                alt="Google Play"
-                style={{ height: "40px" }}
-              />
-            </a>
+          {/* 🔥 STORE BUTTONS */}
+          <div className="store-buttons">
+            {googleplay && (
+              <a href={googleplay}>
+                <img src="/media/googlePlayBadge.svg" alt="Google Play" />
+              </a>
+            )}
 
-            <a href={appstore}>
-              <img
-                src="media/appstoreBadge.svg"
-                alt="App Store"
-                style={{ height: "40px" }}
-              />
-            </a>
+            {appstore && (
+              <a href={appstore}>
+                <img src="/media/appstoreBadge.svg" alt="App Store" />
+              </a>
+            )}
           </div>
 
         </div>
+
       </div>
+
     </div>
   );
 }
