@@ -153,54 +153,40 @@ app.get("/positions", auth, async (req, res) => {
 
 app.get("/api/stocks", async (req, res) => {
   try {
-   const symbols = [
-  "RELIANCE.NS","TCS.NS","INFY.NS","HDFCBANK.NS","ICICIBANK.NS",
-  "HINDUNILVR.NS","ITC.NS","SBIN.NS","BHARTIARTL.NS","KOTAKBANK.NS",
 
-  "LT.NS","AXISBANK.NS","ASIANPAINT.NS","MARUTI.NS","SUNPHARMA.NS",
-  "ULTRACEMCO.NS","TITAN.NS","NESTLEIND.NS","BAJFINANCE.NS","BAJAJFINSV.NS",
+    // ✅ KEEP SMALLER LIST FIRST
+    const symbols = [
+      "RELIANCE.NS",
+      "TCS.NS",
+      "INFY.NS",
+      "HDFCBANK.NS",
+      "ICICIBANK.NS",
+      "ITC.NS",
+      "SBIN.NS",
+      "BHARTIARTL.NS"
+    ];
 
-  "WIPRO.NS","HCLTECH.NS","TECHM.NS","POWERGRID.NS","NTPC.NS",
-  "ONGC.NS","COALINDIA.NS","TATASTEEL.NS","JSWSTEEL.NS","ADANIENT.NS",
+    // ✅ FETCH ONE BY ONE
+    const quotesArr = await Promise.all(
+      symbols.map(async (symbol) => {
+        try {
+          const data = await yahooFinance.quote(symbol);
+          return data;
+        } catch (err) {
+          console.log(`❌ Failed for ${symbol}`);
+          return null;
+        }
+      })
+    );
 
-  "ADANIPORTS.NS","GRASIM.NS","CIPLA.NS","DRREDDY.NS","EICHERMOT.NS",
-  "HEROMOTOCO.NS","BRITANNIA.NS","DIVISLAB.NS","APOLLOHOSP.NS","INDUSINDBK.NS",
-
-  "BAJAJ-AUTO.NS","HDFCLIFE.NS","SBILIFE.NS","ICICIPRULI.NS","ICICIGI.NS",
-  "PIDILITIND.NS","DABUR.NS","GODREJCP.NS","MARICO.NS","COLPAL.NS",
-
-  "M&M.NS","TATAMOTORS.NS","TVSMOTOR.NS","ASHOKLEY.NS","ESCORTS.NS",
-  "BHEL.NS","BEL.NS","HAL.NS","LUPIN.NS","AUROPHARMA.NS",
-
-  "BIOCON.NS","TORNTPHARM.NS","ZYDUSLIFE.NS","ALKEM.NS","GLAND.NS",
-  "NAUKRI.NS","PAYTM.NS","ZOMATO.NS","NYKAA.NS","POLICYBZR.NS",
-
-  "IRCTC.NS","RVNL.NS","IRFC.NS","CONCOR.NS","GAIL.NS",
-  "IOC.NS","BPCL.NS","HPCL.NS","PETRONET.NS","IGL.NS",
-
-  "SIEMENS.NS","ABB.NS","HAVELLS.NS","DIXON.NS","AMBER.NS",
-  "VOLTAS.NS","BLUESTARCO.NS","CROMPTON.NS","WHIRLPOOL.NS","TTKPRESTIG.NS",
-
-  "TATAPOWER.NS","ADANIGREEN.NS","ADANIPOWER.NS","NHPC.NS","SJVN.NS"
-];
-
-    let rawQuotes;
-
-    try {
-      rawQuotes = await yahooFinance.quote(symbols);
-    } catch (err) {
-      console.error("❌ Yahoo API failed:", err.message);
-      return res.status(500).json({ error: "Stock API failed" });
-    }
-
-    const quotesArr = Array.isArray(rawQuotes) ? rawQuotes : [rawQuotes];
-
+    // ✅ REMOVE FAILED STOCKS
     const stocks = quotesArr
-      .filter(q => q && q.symbol)
-      .map(q => ({
+      .filter(Boolean)
+      .map((q) => ({
         symbol: q.symbol,
-        regularMarketPrice: q.regularMarketPrice ?? 0,
-        regularMarketChangePercent: q.regularMarketChangePercent ?? 0,
+        regularMarketPrice: q.regularMarketPrice || 0,
+        regularMarketChangePercent:
+          q.regularMarketChangePercent || 0,
       }));
 
     res.json({
@@ -209,11 +195,13 @@ app.get("/api/stocks", async (req, res) => {
     });
 
   } catch (err) {
-    console.error("❌ SERVER ERROR:", err.message);
-    res.status(500).json({ error: "Internal server error" });
+    console.error("❌ SERVER ERROR:", err);
+
+    res.status(500).json({
+      error: "Internal server error",
+    });
   }
 });
-
 // ================= AUTH ROUTES =================
 
 app.post("/signup", async (req, res) => {
