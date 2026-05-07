@@ -154,25 +154,125 @@ app.get("/positions", auth, async (req, res) => {
 app.get("/api/stocks", async (req, res) => {
   try {
 
-    // ✅ KEEP SMALLER LIST FIRST
     const symbols = [
-      "RELIANCE.NS", "TCS.NS", "INFY.NS", "HDFCBANK.NS", "ICICIBANK.NS", "HINDUNILVR.NS", "ITC.NS", "SBIN.NS", "BHARTIARTL.NS", "KOTAKBANK.NS", "LT.NS", "AXISBANK.NS", "ASIANPAINT.NS", "MARUTI.NS", "SUNPHARMA.NS", "ULTRACEMCO.NS", "TITAN.NS", "NESTLEIND.NS", "BAJFINANCE.NS", "BAJAJFINSV.NS", "WIPRO.NS", "HCLTECH.NS", "TECHM.NS", "POWERGRID.NS", "NTPC.NS", "ONGC.NS", "COALINDIA.NS", "TATASTEEL.NS", "JSWSTEEL.NS", "ADANIENT.NS", "ADANIPORTS.NS", "GRASIM.NS", "CIPLA.NS", "DRREDDY.NS", "EICHERMOT.NS", "HEROMOTOCO.NS", "BRITANNIA.NS", "DIVISLAB.NS", "APOLLOHOSP.NS", "INDUSINDBK.NS", "BAJAJ-AUTO.NS", "HDFCLIFE.NS", "SBILIFE.NS", "ICICIPRULI.NS", "ICICIGI.NS", "PIDILITIND.NS", "DABUR.NS", "GODREJCP.NS", "MARICO.NS", "COLPAL.NS", "M&M.NS", "TATAMOTORS.NS", "TVSMOTOR.NS", "ASHOKLEY.NS", "ESCORTS.NS", "BHEL.NS", "BEL.NS", "HAL.NS", "LUPIN.NS", "AUROPHARMA.NS", "BIOCON.NS", "TORNTPHARM.NS", "ZYDUSLIFE.NS", "ALKEM.NS", "GLAND.NS", "NAUKRI.NS", "PAYTM.NS", "ZOMATO.NS", "NYKAA.NS", "POLICYBZR.NS", "IRCTC.NS", "RVNL.NS", "IRFC.NS", "CONCOR.NS", "GAIL.NS", "IOC.NS", "BPCL.NS", "HPCL.NS", "PETRONET.NS", "IGL.NS", "SIEMENS.NS", "ABB.NS", "HAVELLS.NS", "DIXON.NS", "AMBER.NS", "VOLTAS.NS", "BLUESTARCO.NS", "CROMPTON.NS", "WHIRLPOOL.NS", "TTKPRESTIG.NS", "TATAPOWER.NS", "ADANIGREEN.NS", "ADANIPOWER.NS", "NHPC.NS", "SJVN.NS"
+      "RELIANCE.NS",
+      "TCS.NS",
+      "INFY.NS",
+      "HDFCBANK.NS",
+      "ICICIBANK.NS",
+      "HINDUNILVR.NS",
+      "ITC.NS",
+      "SBIN.NS",
+      "BHARTIARTL.NS",
+      "KOTAKBANK.NS",
+
+      "LT.NS",
+      "AXISBANK.NS",
+      "ASIANPAINT.NS",
+      "MARUTI.NS",
+      "SUNPHARMA.NS",
+      "ULTRACEMCO.NS",
+      "TITAN.NS",
+      "NESTLEIND.NS",
+      "BAJFINANCE.NS",
+      "BAJAJFINSV.NS",
+
+      "WIPRO.NS",
+      "HCLTECH.NS",
+      "TECHM.NS",
+      "POWERGRID.NS",
+      "NTPC.NS",
+      "ONGC.NS",
+      "COALINDIA.NS",
+      "TATASTEEL.NS",
+      "JSWSTEEL.NS",
+      "ADANIENT.NS",
+
+      "ADANIPORTS.NS",
+      "GRASIM.NS",
+      "CIPLA.NS",
+      "DRREDDY.NS",
+      "EICHERMOT.NS",
+      "HEROMOTOCO.NS",
+      "BRITANNIA.NS",
+      "DIVISLAB.NS",
+      "APOLLOHOSP.NS",
+      "INDUSINDBK.NS",
+
+      "BAJAJ-AUTO.NS",
+      "HDFCLIFE.NS",
+      "SBILIFE.NS",
+      "ICICIPRULI.NS",
+      "ICICIGI.NS",
+      "PIDILITIND.NS",
+      "DABUR.NS",
+      "GODREJCP.NS",
+      "MARICO.NS",
+      "COLPAL.NS",
+
+      "M&M.NS",
+      "TATAMOTORS.NS",
+      "TVSMOTOR.NS",
+      "ASHOKLEY.NS",
+      "ESCORTS.NS",
+      "BHEL.NS",
+      "BEL.NS",
+      "HAL.NS",
+      "LUPIN.NS",
+      "AUROPHARMA.NS",
+
+      "BIOCON.NS",
+      "TORNTPHARM.NS",
+      "ZYDUSLIFE.NS",
+      "ALKEM.NS",
+      "GLAND.NS",
+      "NAUKRI.NS",
+      "PAYTM.NS",
+      "ZOMATO.NS",
+      "NYKAA.NS",
+      "POLICYBZR.NS",
+
+      "IRCTC.NS",
+      "RVNL.NS",
+      "IRFC.NS",
+      "CONCOR.NS",
+      "GAIL.NS",
+      "IOC.NS",
+      "BPCL.NS",
+      "HPCL.NS",
+      "PETRONET.NS",
+      "IGL.NS",
+
+      "SIEMENS.NS",
+      "ABB.NS",
+      "HAVELLS.NS",
+      "DIXON.NS",
+      "AMBER.NS",
+      "VOLTAS.NS",
+      "BLUESTARCO.NS",
+      "CROMPTON.NS",
+      "WHIRLPOOL.NS",
+      "TTKPRESTIG.NS",
+
+      "TATAPOWER.NS",
+      "ADANIGREEN.NS",
+      "ADANIPOWER.NS",
+      "NHPC.NS",
+      "SJVN.NS"
     ];
 
-    // ✅ FETCH ONE BY ONE
+    // ✅ FETCH SAFELY
     const quotesArr = await Promise.all(
       symbols.map(async (symbol) => {
         try {
-          const data = await yahooFinance.quote(symbol);
-          return data;
+          return await yahooFinance.quote(symbol);
         } catch (err) {
-          console.log(`❌ Failed for ${symbol}`);
+          console.log(`❌ Failed: ${symbol}`);
           return null;
         }
       })
     );
 
-    // ✅ REMOVE FAILED STOCKS
     const stocks = quotesArr
       .filter(Boolean)
       .map((q) => ({
