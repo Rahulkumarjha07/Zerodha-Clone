@@ -33,38 +33,62 @@ const WatchList = () => {
   };
 
   // ✅ FETCH DATA
-  useEffect(() => {
-    const fetchData = () => {
-      axios
-        .get("https://zerodha-clone-93hl.onrender.com/api/stocks")
-        .then((res) => {
-          let formatted = res.data.stocks.map((s) => ({
-            name: s.symbol.replace(".NS", ""),
-            price: s.regularMarketPrice,
-            percent: s.regularMarketChangePercent.toFixed(2) + "%",
-            isDown: s.regularMarketChangePercent < 0,
+ useEffect(() => {
+
+  const fetchData = () => {
+
+    axios
+      .get("https://zerodha-clone-93hl.onrender.com/api/stocks")
+
+      .then((res) => {
+
+        let formatted = res.data.stocks.map((s) => ({
+
+          name: s.symbol.replace(".NS", ""),
+
+          price: s.regularMarketPrice || 0,
+
+          percent:
+            (s.regularMarketChangePercent || 0).toFixed(2) + "%",
+
+          isDown:
+            (s.regularMarketChangePercent || 0) < 0,
+
+        }));
+
+        if (!isMarketOpen()) {
+
+          formatted = formatted.map((stock) => ({
+            ...stock,
+
+            price: Number(
+              (
+                stock.price +
+                (Math.random() * 10 - 5)
+              ).toFixed(2)
+            ),
           }));
+        }
 
-          // 🔥 Fake movement when market closed
-          if (!isMarketOpen()) {
-            formatted = formatted.map((stock) => ({
-              ...stock,
-              price: Number(
-                (stock.price + (Math.random() * 10 - 5)).toFixed(2)
-              ),
-            }));
-          }
+        setWatchlist(formatted);
+      })
 
-          setWatchlist(formatted);
-        })
-        .catch((err) => console.error(err));
-    };
+      .catch((err) => {
 
-    fetchData();
-    const interval = setInterval(fetchData, 5000);
+        console.error("API Error:", err);
 
-    return () => clearInterval(interval);
-  }, []);
+        setWatchlist([]);
+      });
+  };
+
+  fetchData();
+
+  // ✅ 30 seconds
+  const interval = setInterval(fetchData, 30000);
+
+  return () => clearInterval(interval);
+
+}, []);
 
   // ✅ SEARCH FILTER
   const filteredStocks = watchlist.filter((stock) =>
