@@ -262,16 +262,22 @@ app.get("/api/stocks", async (req, res) => {
     ];
 
     // ✅ FETCH SAFELY
-    const quotesArr = await Promise.all(
-      symbols.map(async (symbol) => {
-        try {
-          return await yahooFinance.quote(symbol);
-        } catch (err) {
-          console.log(`❌ Failed: ${symbol}`);
-          return null;
-        }
-      })
-    );
+    const quotesArr = [];
+
+for (const symbol of symbols) {
+
+  try {
+
+    const data = await yahooFinance.quote(symbol);
+
+    quotesArr.push(data);
+
+  } catch (err) {
+
+    console.log(`❌ Failed: ${symbol}`);
+
+  }
+}
 
     const stocks = quotesArr
       .filter(Boolean)
