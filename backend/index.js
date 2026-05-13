@@ -155,61 +155,141 @@ app.get("/api/stocks", async (req, res) => {
   try {
 
     const symbols = [
-      "RELIANCE.NS",
-      "TCS.NS",
-      "INFY.NS",
-      "HDFCBANK.NS",
-      "ICICIBANK.NS",
-      "HINDUNILVR.NS",
-      "ITC.NS",
-      "SBIN.NS",
-      "BHARTIARTL.NS",
-      "KOTAKBANK.NS",
+  "RELIANCE.NS",
+  "TCS.NS",
+  "INFY.NS",
+  "HDFCBANK.NS",
+  "ICICIBANK.NS",
+  "HINDUNILVR.NS",
+  "ITC.NS",
+  "SBIN.NS",
+  "BHARTIARTL.NS",
+  "KOTAKBANK.NS",
 
-      "LT.NS",
-      "AXISBANK.NS",
-      "ASIANPAINT.NS",
-      "MARUTI.NS",
-      "SUNPHARMA.NS",
+  "LT.NS",
+  "AXISBANK.NS",
+  "ASIANPAINT.NS",
+  "MARUTI.NS",
+  "SUNPHARMA.NS",
+  "ULTRACEMCO.NS",
+  "TITAN.NS",
+  "NESTLEIND.NS",
+  "BAJFINANCE.NS",
+  "BAJAJFINSV.NS",
 
-      "ULTRACEMCO.NS",
-      "TITAN.NS",
-      "NESTLEIND.NS",
-      "BAJFINANCE.NS",
-      "BAJAJFINSV.NS"
-    ];
+  "WIPRO.NS",
+  "HCLTECH.NS",
+  "TECHM.NS",
+  "POWERGRID.NS",
+  "NTPC.NS",
+  "ONGC.NS",
+  "COALINDIA.NS",
+  "TATASTEEL.NS",
+  "JSWSTEEL.NS",
+  "ADANIENT.NS",
 
-    // ✅ Batch Fetch
-    let quotes = [];
+  "ADANIPORTS.NS",
+  "GRASIM.NS",
+  "CIPLA.NS",
+  "DRREDDY.NS",
+  "EICHERMOT.NS",
+  "HEROMOTOCO.NS",
+  "BRITANNIA.NS",
+  "DIVISLAB.NS",
+  "APOLLOHOSP.NS",
+  "INDUSINDBK.NS",
 
-    try {
+  "BAJAJ-AUTO.NS",
+  "HDFCLIFE.NS",
+  "SBILIFE.NS",
+  "ICICIPRULI.NS",
+  "ICICIGI.NS",
+  "PIDILITIND.NS",
+  "DABUR.NS",
+  "GODREJCP.NS",
+  "MARICO.NS",
+  "COLPAL.NS",
 
-      const data = await yahooFinance.quote(symbols);
+  "M&M.NS",
+  "TATAMOTORS.NS",
+  "TVSMOTOR.NS",
+  "ASHOKLEY.NS",
+  "ESCORTS.NS",
+  "BHEL.NS",
+  "BEL.NS",
+  "HAL.NS",
+  "LUPIN.NS",
+  "AUROPHARMA.NS",
 
-      quotes = Array.isArray(data)
-        ? data
-        : [data];
+  "BIOCON.NS",
+  "TORNTPHARM.NS",
+  "ZYDUSLIFE.NS",
+  "ALKEM.NS",
+  "GLAND.NS",
+  "NAUKRI.NS",
+  "PAYTM.NS",
+  "ZOMATO.NS",
+  "NYKAA.NS",
+  "POLICYBZR.NS",
 
-    } catch (err) {
+  "IRCTC.NS",
+  "RVNL.NS",
+  "IRFC.NS",
+  "CONCOR.NS",
+  "GAIL.NS",
+  "IOC.NS",
+  "BPCL.NS",
+  "HPCL.NS",
+  "PETRONET.NS",
+  "IGL.NS",
 
-      console.error("❌ Yahoo Fetch Error:", err.message);
+  "SIEMENS.NS",
+  "ABB.NS",
+  "HAVELLS.NS",
+  "DIXON.NS",
+  "AMBER.NS",
+  "VOLTAS.NS",
+  "BLUESTARCO.NS",
+  "CROMPTON.NS",
+  "WHIRLPOOL.NS",
+  "TTKPRESTIG.NS",
 
-      return res.status(500).json({
-        error: "Stock fetch failed",
-      });
-    }
+  "TATAPOWER.NS",
+  "ADANIGREEN.NS",
+  "ADANIPOWER.NS",
+  "NHPC.NS",
+  "SJVN.NS"
+];
 
-    // ✅ Format Response
-    const stocks = quotes
-      .filter(Boolean)
-      .map((q) => ({
-        symbol: q.symbol,
-        regularMarketPrice:
-          q.regularMarketPrice || 0,
+    // ✅ Parallel fetching
+    const quotes = await Promise.all(
 
-        regularMarketChangePercent:
-          q.regularMarketChangePercent || 0,
-      }));
+      symbols.map(async (symbol) => {
+
+        try {
+
+          const q = await yahooFinance.quote(symbol);
+
+          return {
+            symbol: q.symbol,
+            regularMarketPrice:
+              q.regularMarketPrice || 0,
+
+            regularMarketChangePercent:
+              q.regularMarketChangePercent || 0,
+          };
+
+        } catch (err) {
+
+          console.log(`❌ Failed: ${symbol}`);
+
+          return null;
+        }
+      })
+    );
+
+    // ✅ Remove failed stocks
+    const stocks = quotes.filter(Boolean);
 
     res.json({
       count: stocks.length,
@@ -218,10 +298,10 @@ app.get("/api/stocks", async (req, res) => {
 
   } catch (err) {
 
-    console.error("❌ SERVER ERROR:", err);
+    console.error("❌ STOCK API ERROR:", err);
 
     res.status(500).json({
-      error: "Internal server error",
+      error: err.message,
     });
   }
 });
