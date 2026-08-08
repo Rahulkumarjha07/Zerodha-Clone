@@ -341,9 +341,13 @@ app.post("/login", async (req, res) => {
       username: user.username, // 🔥 added
     });
 
-  } catch {
-    res.status(500).json({ msg: "Login error" });
-  }
+  } catch (err) {
+    console.error("❌ LOGIN ERROR:", err);
+    res.status(500).json({
+        msg: "Login error",
+        error: err.message
+    });
+}
 });
 
 // ================= FUNDS =================
